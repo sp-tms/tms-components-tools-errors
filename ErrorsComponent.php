@@ -6,63 +6,94 @@ use System\Base\BaseComponent;
 
 class ErrorsComponent extends BaseComponent
 {
-    protected $package;
-
-    public function initialize()
+    public function beforeExecuteRoute()
     {
-        //$this->package = $this->usePackage(?::class);
+        $this->view->setViewsDir($this->modules->views->getPhalconViewPath());
+
+        parent::beforeExecuteRoute();
     }
 
-    /**
-     * @acl(name=view)
-     */
-    public function viewAction()
+    public function controllerNotFoundAction()
     {
-        return;
+        $this->view->pick('common/errors/controllernotfound');
+
+        $this->addResponse('Component Not Found', 1);
     }
 
-    /**
-     * @acl(name=add)
-     */
-    public function addAction()
+    public function controllerPackageDependencyErrorAction()
     {
-        $this->requestIsPost();
+        $this->view->pick('common/errors/controllerdependencyerror');
 
-        //$this->package->add{?}($this->postData());
-
-        $this->addResponse(
-            $this->package->packagesData->responseMessage,
-            $this->package->packagesData->responseCode
-        );
+        $this->addResponse('Component Dependency Error', 1);
     }
 
-    /**
-     * @acl(name=update)
-     */
-    public function updateAction()
+    public function controllerViewDependencyErrorAction()
     {
-        $this->requestIsPost();
+        $this->view->pick('common/errors/controllerdependencyerror');
 
-        //$this->package->update{?}($this->postData());
-
-        $this->addResponse(
-            $this->package->packagesData->responseMessage,
-            $this->package->packagesData->responseCode
-        );
+        $this->addResponse('Component Dependency Error', 1);
     }
 
-    /**
-     * @acl(name=remove)
-     */
-    public function removeAction()
+    public function appPackagePermissionDeniedAction()
     {
-        $this->requestIsPost();
+        $this->view->pick('common/errors/controllerdependencyerror');
 
-        //$this->package->remove{?}($this->postData());
+        $this->addResponse('Component Dependency Error', 1);
+    }
 
-        $this->addResponse(
-            $this->package->packagesData->responseMessage,
-            $this->package->packagesData->responseCode
-        );
+    public function appComponentPermissionDeniedAction()
+    {
+        $this->view->pick('common/errors/controllerdependencyerror');
+
+        $this->addResponse('Component Dependency Error', 1);
+    }
+
+    public function actionNotFoundAction()
+    {
+        $this->view->pick('common/errors/actionnotfound');
+
+        $this->addResponse('Component Action Not Found', 1);
+    }
+
+    public function templateErrorAction()
+    {
+        $this->view->pick('common/errors/templateerror');
+
+        $this->addResponse('Template For Component Not Found', 1);
+    }
+
+    public function routeNotFoundAction()
+    {
+        $this->view->pick('common/errors/routenotfound');
+
+        $this->addResponse('Route Not Found', 1);
+    }
+
+    public function idNotFoundAction()
+    {
+        $this->view->pick('common/errors/idnotfound');
+
+        $this->addResponse('Id Not Found', 1);
+    }
+
+    public function permissionDeniedAction()
+    {
+        $this->view->pick('common/errors/permissiondenied');
+
+        $this->addResponse('Permission denied, contact administrator!', 1);
+    }
+
+    public function serverErrorAction()
+    {
+        $this->view->pick('common/errors/servererror');
+
+        $this->addResponse('Server Error, contact administrator!', 1);
+    }
+
+    public function invalidDataAction(...$params)
+    {
+        $this->view->pick('common/errors/servererror');
+
+        $this->addResponse('Invalid data provided. Error: ' . $params[0], 1);
     }
 }
